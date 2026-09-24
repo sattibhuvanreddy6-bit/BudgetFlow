@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BudgetFlow - Smart Budget Tracker</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top left,#4338ca 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#0891b2 0%,transparent 30%),
+        #0f172a;
+    color:white;
+    padding:18px;
+}
+
+.container{
+    width:100%;
+    max-width:1050px;
+    margin:auto;
+}
+
+.header{
+    text-align:center;
+    padding:15px 10px 25px;
+}
+
+.logo{
+    font-size:42px;
+}
+
+.header h1{
+    font-size:34px;
+    margin-top:5px;
+}
+
+.header p{
+    color:#cbd5e1;
+    margin-top:7px;
+}
+
+.card{
+    background:rgba(255,255,255,0.09);
+    border:1px solid rgba(255,255,255,0.14);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.25);
+}
+
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.summary-card{
+    padding:20px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.08);
+}
+
+.summary-card p{
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+.summary-card h2{
+    margin-top:8px;
+    font-size:27px;
+}
+
+.balance{color:#60a5fa;}
+.income{color:#4ade80;}
+.expense{color:#fb7185;}
+
+h2{
+    margin-bottom:16px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+input,select{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:10px;
+    outline:none;
+    font-size:15px;
+}
+
+button{
+    border:0;
+    border-radius:10px;
+    padding:12px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.add-btn{
+    width:100%;
+    margin-top:13px;
+    color:white;
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+}
+
+.budget-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.budget-box{
+    background:rgba(255,255,255,0.07);
+    padding:17px;
+    border-radius:15px;
+}
+
+.budget-box label{
+    display:block;
+    color:#cbd5e1;
+    margin-bottom:8px;
+}
+
+.progress{
+    height:10px;
+    background:#334155;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:12px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#22c55e,#eab308);
+    transition:0.3s;
+}
+
+.budget-info{
+    margin-top:8px;
+    font-size:13px;
+    color:#cbd5e1;
+}
+
+.controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.transaction{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px;
+    margin-top:10px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.07);
+}
+
+.icon{
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:rgba(255,255,255,0.10);
+}
+
+.info{
+    flex:1;
+}
+
+.info strong{
+    display:block;
+    margin-bottom:4px;
+}
+
+.info small{
+    color:#94a3b8;
+}
+
+.amount{
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.income-text{color:#4ade80;}
+.expense-text{color:#fb7185;}
+
+.edit-btn{
+    background:#2563eb;
+    color:white;
+    padding:8px 10px;
+    font-size:12px;
+}
+
+.delete-btn{
+    background:#ef4444;
+    color:white;
+    padding:8px 10px;
+    font-size:12px;
+}
+
+.clear-btn{
+    width:100%;
+    margin-top:15px;
+    background:#991b1b;
+    color:white;
+}
+
+.chart{
+    margin-top:10px;
+}
+
+.chart-row{
+    margin-bottom:13px;
+}
+
+.chart-label{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:5px;
+    font-size:13px;
+}
+
+.chart-bg{
+    height:12px;
+    background:#334155;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.chart-fill{
+    height:100%;
+    width:0%;
+    background:#8b5cf6;
+    border-radius:20px;
+}
+
+.empty{
+    text-align:center;
+    padding:20px;
+    color:#94a3b8;
+}
+
+.footer{
+    text-align:center;
+    color:#94a3b8;
+    padding:10px;
+    font-size:13px;
+}
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .header h1{
+        font-size:27px;
+    }
+
+    .summary{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid,
+    .budget-grid,
+    .controls{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:17px;
+    }
+
+    .transaction{
+        flex-wrap:wrap;
+    }
+
+    .amount{
+        margin-left:54px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+    <div class="logo">💰</div>
+    <h1>BudgetFlow</h1>
+    <p>Smart Daily Income & Expense Tracker</p>
+</div>
+
+
+<!-- SUMMARY -->
+
+<div class="summary">
+
+    <div class="summary-card">
+        <p>💳 Current Balance</p>
+        <h2 id="balance" class="balance">₹0.00</h2>
+    </div>
+
+    <div class="summary-card">
+        <p>📈 Total Income</p>
+        <h2 id="income" class="income">₹0.00</h2>
+    </div>
+
+    <div class="summary-card">
+        <p>📉 Total Expense</p>
+        <h2 id="expense" class="expense">₹0.00</h2>
+    </div>
+
+</div>
+
+
+<!-- ADD TRANSACTION -->
+
+<div class="card">
+
+<h2>➕ Add Transaction</h2>
+
+<div class="form-grid">
+
+<input
+    type="number"
+    id="amount"
+    placeholder="💰 Amount"
+>
+
+<select id="type">
+    <option value="income">📈 Income</option>
+    <option value="expense">📉 Expense</option>
+</select>
+
+<select id="category">
+    <option>Salary</option>
+    <option>Food</option>
+    <option>Transport</option>
+    <option>Bills</option>
+    <option>Shopping</option>
+    <option>Education</option>
+    <option>Entertainment</option>
+    <option>Health</option>
+    <option>Other</option>
+</select>
+
+<input
+    type="text"
+    id="note"
+    placeholder="📝 Note"
+>
+
+</div>
+
+<button
+    class="add-btn"
+    onclick="addTransaction()"
+>
+➕ Add Transaction
+</button>
+
+</div>
+
+
+<!-- BUDGET -->
+
+<div class="card">
+
+<h2>🎯 Budget Limits</h2>
+
+<div class="budget-grid">
+
+<div class="budget-box">
+
+<label>Daily Expense Limit</label>
+
+<input
+    type="number"
+    id="dailyLimit"
+    placeholder="Example: 500"
+    onchange="saveLimits()"
+>
+
+<div class="progress">
+    <div
+        class="progress-bar"
+        id="dailyProgress"
+    ></div>
+</div>
+
+<div
+    class="budget-info"
+    id="dailyInfo"
+>
+₹0 spent today
+</div>
+
+</div>
+
+
+<div class="budget-box">
+
+<label>Monthly Expense Limit</label>
+
+<input
+    type="number"
+    id="monthlyLimit"
+    placeholder="Example: 10000"
+    onchange="saveLimits()"
+>
+
+<div class="progress">
+    <div
+        class="progress-bar"
+        id="monthlyProgress"
+    ></div>
+</div>
+
+<div
+    class="budget-info"
+    id="monthlyInfo"
+>
+₹0 spent this month
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- CATEGORY CHART -->
+
+<div class="card">
+
+<h2>📊 Expense Breakdown</h2>
+
+<div id="chart" class="chart"></div>
+
+</div>
+
+
+<!-- TRANSACTIONS -->
+
+<div class="card">
+
+<h2>📋 Transactions</h2>
+
+<div class="controls">
+
+<input
+    type="text"
+    id="search"
+    placeholder="🔍 Search transactions..."
+    oninput="displayTransactions()"
+>
+
+<select
+    id="filter"
+    onchange="displayTransactions()"
+>
+    <option value="all">All Transactions</option>
+    <option value="income">Income Only</option>
+    <option value="expense">Expense Only</option>
+</select>
+
+</div>
+
+<div id="transactionsList"></div>
+
+<button
+    class="clear-btn"
+    onclick="clearAll()"
+>
+🗑️ Clear All Transactions
+</button>
+
+</div>
+
+
+<div class="footer">
+BudgetFlow • Manage your money smarter 💙
+</div>
+
+</div>
+
+
+<script>
+
+let transactions =
+JSON.parse(
+    localStorage.getItem("budgetFlowData")
+) || [];
+
+let limits =
+JSON.parse(
+    localStorage.getItem("budgetLimits")
+) || {
+    daily:0,
+    monthly:0
+};
+
+
+/* ADD */
+
+function addTransaction(){
+
+    const amount =
+        parseFloat(
+            document.getElementById("amount").value
+        );
+
+    const type =
+        document.getElementById("type").value;
+
+    const category =
+        document.getElementById("category").value;
+
+    const note =
+        document.getElementById("note").value.trim();
+
+
+    if(!amount || amount<=0){
+
+        alert("Please enter a valid amount.");
+
+        return;
+    }
+
+
+    const now = new Date();
+
+
+    transactions.push({
+
+        id:Date.now(),
+
+        amount:amount,
+
+        type:type,
+
+        category:category,
+
+        note:note,
+
+        date:now.toLocaleDateString(),
+
+        time:now.toLocaleTimeString(),
+
+        timestamp:now.getTime()
+
+    });
+
+
+    saveData();
+
+
+    document.getElementById("amount").value="";
+
+    document.getElementById("note").value="";
+
+
+    updateScreen();
+
+}
+
+
+/* SAVE */
+
+function saveData(){
+
+    localStorage.setItem(
+        "budgetFlowData",
+        JSON.stringify(transactions)
+    );
+
+}
+
+
+/* LIMITS */
+
+function saveLimits(){
+
+    limits.daily =
+        parseFloat(
+            document.getElementById("dailyLimit").value
+        ) || 0;
+
+    limits.monthly =
+        parseFloat(
+            document.getElementById("monthlyLimit").value
+        ) || 0;
+
+
+    localStorage.setItem(
+        "budgetLimits",
+        JSON.stringify(limits)
+    );
+
+
+    updateBudget();
+
+}
+
+
+/* SUMMARY */
+
+function updateSummary(){
+
+    let income=0;
+
+    let expense=0;
+
+
+    transactions.forEach(t=>{
+
+        if(t.type==="income")
+            income+=t.amount;
+
+        else
+            expense+=t.amount;
+
+    });
+
+
+    document.getElementById("income").innerText =
+        "₹"+income.toFixed(2);
+
+    document.getElementById("expense").innerText =
+        "₹"+expense.toFixed(2);
+
+    document.getElementById("balance").innerText =
+        "₹"+(income-expense).toFixed(2);
+
+}
+
+
+/* BUDGET */
+
+function updateBudget(){
+
+    const today =
+        new Date().toLocaleDateString();
+
+
+    const now =
+        new Date();
+
+
+    let todayExpense=0;
+
+    let monthExpense=0;
+
+
+    transactions.forEach(t=>{
+
+        if(t.type!=="expense")
+            return;
+
+
+        if(t.date===today)
+            todayExpense+=t.amount;
+
+
+        const d =
+            new Date(t.timestamp);
+
+
+        if(
+            d.getMonth()===now.getMonth() &&
+            d.getFullYear()===now.getFullYear()
+        ){
+
+            monthExpense+=t.amount;
+
+        }
+
+    });
+
+
+    document.getElementById("dailyLimit").value =
+        limits.daily || "";
+
+    document.getElementById("monthlyLimit").value =
+        limits.monthly || "";
+
+
+    document.getElementById("dailyInfo").innerText =
+        "₹"+todayExpense.toFixed(2)+" spent today";
+
+
+    document.getElementById("monthlyInfo").innerText =
+        "₹"+monthExpense.toFixed(2)+" spent this month";
+
+
+    let dailyPercent =
+        limits.daily
+        ? (todayExpense/limits.daily)*100
+        : 0;
+
+
+    let monthlyPercent =
+        limits.monthly
+        ? (monthExpense/limits.monthly)*100
+        : 0;
+
+
+    document.getElementById("dailyProgress").style.width =
+        Math.min(dailyPercent,100)+"%";
+
+
+    document.getElementById("monthlyProgress").style.width =
+        Math.min(monthlyPercent,100)+"%";
+
+
+    if(
+        limits.daily &&
+        todayExpense>limits.daily
+    ){
+
+        document.getElementById("dailyInfo").innerText +=
+            " ⚠️ Limit exceeded!";
+
+    }
+
+
+    if(
+        limits.monthly &&
+        monthExpense>limits.monthly
+    ){
+
+        document.getElementById("monthlyInfo").innerText +=
+            " ⚠️ Limit exceeded!";
+
+    }
+
+}
+
+
+/* CHART */
+
+function updateChart(){
+
+    const chart =
+        document.getElementById("chart");
+
+
+    chart.innerHTML="";
+
+
+    let categories={};
+
+
+    transactions.forEach(t=>{
+
+        if(t.type==="expense"){
+
+            if(!categories[t.category])
+                categories[t.category]=0;
+
+            categories[t.category]+=t.amount;
+
+        }
+
+    });
+
+
+    const values =
+        Object.values(categories);
+
+
+    if(values.length===0){
+
+        chart.innerHTML =
+            '<div class="empty">📊 No expense data yet</div>';
+
+        return;
+
+    }
+
+
+    const max =
+        Math.max(...values);
+
+
+    Object.keys(categories).forEach(category=>{
+
+        const amount =
+            categories[category];
+
+
+        const percent =
+            (amount/max)*100;
+
+
+        chart.innerHTML += `
+
+        <div class="chart-row">
+
+            <div class="chart-label">
+
+                <span>${category}</span>
+
+                <span>₹${amount.toFixed(2)}</span>
+
+            </div>
+
+            <div class="chart-bg">
+
+                <div
+                    class="chart-fill"
+                    style="width:${percent}%"
+                ></div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
+/* DISPLAY */
+
+function displayTransactions(){
+
+    const list =
+        document.getElementById("transactionsList");
+
+
+    const search =
+        document.getElementById("search")
+        .value
+        .toLowerCase();
+
+
+    const filter =
+        document.getElementById("filter").value;
+
+
+    list.innerHTML="";
+
+
+    let filtered =
+        [...transactions]
+        .reverse()
+        .filter(t=>{
+
+            const text =
+                (
+                    t.category+
+                    " "+
+                    t.note
+                ).toLowerCase();
+
+
+            const matchesSearch =
+                text.includes(search);
+
+
+            const matchesFilter =
+                filter==="all" ||
+                t.type===filter;
+
+
+            return (
+                matchesSearch &&
+                matchesFilter
+            );
+
+        });
+
+
+    if(filtered.length===0){
+
+        list.innerHTML =
+            '<div class="empty">📭 No matching transactions</div>';
+
+        return;
+
+    }
+
+
+    filtered.forEach(t=>{
+
+        const div =
+            document.createElement("div");
+
+
+        div.className="transaction";
+
+
+        const income =
+            t.type==="income";
+
+
+        div.innerHTML=`
+
+        <div class="icon">
+            ${income?"📈":"📉"}
+        </div>
+
+        <div class="info">
+
+            <strong>${t.category}</strong>
+
+            <small>
+                ${t.note || "No note"}
+            </small>
+
+            <br>
+
+            <small>
+                📅 ${t.date}
+                •
+                ⏰ ${t.time}
+            </small>
+
+        </div>
+
+        <div
+            class="amount ${
+                income
+                ? "income-text"
+                : "expense-text"
+            }"
+        >
+            ${income?"+":"-"}₹${t.amount.toFixed(2)}
+        </div>
+
+        <button
+            class="edit-btn"
+            onclick="editTransaction(${t.id})"
+        >
+            Edit
+        </button>
+
+        <button
+            class="delete-btn"
+            onclick="deleteTransaction(${t.id})"
+        >
+            Delete
+        </button>
+
+        `;
+
+
+        list.appendChild(div);
+
+    });
+
+}
+
+
+/* EDIT */
+
+function editTransaction(id){
+
+    const t =
+        transactions.find(
+            x=>x.id===id
+        );
+
+
+    if(!t) return;
+
+
+    const newAmount =
+        prompt(
+            "Enter new amount:",
+            t.amount
+        );
+
+
+    if(
+        newAmount===null ||
+        !newAmount ||
+        Number(newAmount)<=0
+    ){
+
+        return;
+
+    }
+
+
+    t.amount =
+        Number(newAmount);
+
+
+    saveData();
+
+    updateScreen();
+
+}
+
+
+/* DELETE */
+
+function deleteTransaction(id){
+
+    transactions =
+        transactions.filter(
+            t=>t.id!==id
+        );
+
+
+    saveData();
+
+    updateScreen();
+
+}
+
+
+/* CLEAR */
+
+function clearAll(){
+
+    if(transactions.length===0){
+
+        alert("No transactions.");
+
+        return;
+
+    }
+
+
+    if(
+        confirm(
+            "Delete all transactions?"
+        )
+    ){
+
+        transactions=[];
+
+        localStorage.removeItem(
+            "budgetFlowData"
+        );
+
+        updateScreen();
+
+    }
+
+}
+
+
+/* UPDATE EVERYTHING */
+
+function updateScreen(){
+
+    updateSummary();
+
+    updateBudget();
+
+    updateChart();
+
+    displayTransactions();
+
+}
+
+
+/* LOAD */
+
+document.getElementById("dailyLimit").value =
+    limits.daily || "";
+
+document.getElementById("monthlyLimit").value =
+    limits.monthly || "";
+
+
+updateScreen();
+
+</script>
+
+</body>
+</html>
